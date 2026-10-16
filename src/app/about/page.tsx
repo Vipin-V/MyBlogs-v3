@@ -8,22 +8,17 @@ const content = `# About Me
 
 ![Vipin](https://i.ibb.co/My21h21t/vip-Cloud.webp)
 
-Hey there! I'm Vipin, a 25 year old former child who decided to ditch the 9-to-5 grind and embark on an adventure of a lifetime. After years of hustling in a high-pressure job, I realized that life is too short to be stuck in an office, staring at spreadsheets all day.
+hey, i'm Vipin.
 
-So I took a leap of faith, quit my cushy job, and decided to see the world on my own terms. No more stuffy meetings or rigid schedules – just me, my backpack, and an open road ahead.
+so this is my blog. no niche, no content strategy, no posting schedule, just me dumping my thoughts on the internet like it's 2009 and nobody's watching.
 
+i write about whatever's going on in my head at the time. sometimes it's places i visited. sometimes it's a meal that genuinely changed my life. sometimes it's a tech thing i went down a rabbit hole on at 2am. and sometimes it's just... life stuff. the weird, the good, the "why did i do that" moments.
 
-This blog is where I'll be documenting my travels, sharing my experiences, and hopefully inspiring others to follow their wanderlust. From trekking through remote villages to savoring local cuisines, I'm on a mission to immerse myself in different cultures and create memories that will last a lifetime.
+i'm not trying to be an influencer or a thought leader or whatever. i just like writing, and i figured someone out there might find it relatable or useful or at least mildly entertaining.
 
-But this journey isn't just about checking off destinations from a bucket list. It's about self-discovery, personal growth, and finding the courage to live life on my own terms. I'll be honest and raw, sharing the highs and lows, the moments of pure bliss and the inevitable challenges that come with solo travel.
+if you're here, cool. stick around. or don't. no pressure.
 
-So join me on this adventure, and let's explore the world together! Who knows, maybe my stories will inspire you to take that leap of faith and pursue your own dreams, whatever they may be.
-
-Let's go on an adventure!
-
-Love,
-
-Vipin`;
+— Vipin`;
 
 export async function generateMetadata() {
   return {
