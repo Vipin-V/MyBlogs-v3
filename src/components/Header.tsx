@@ -4,6 +4,7 @@ import {
   SheetContent,
   SheetDescription,
   SheetHeader,
+  SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { config } from "@/config";
@@ -47,23 +48,24 @@ export const Navigation: FunctionComponent = () => {
           <SheetTrigger>
             <Menu size="24" />
           </SheetTrigger>
-          <SheetContent>
+          <SheetContent className="!w-64" aria-describedby={undefined}>
             <SheetHeader>
-              <SheetDescription>
+              <SheetTitle className="sr-only">Navigation Menu</SheetTitle>
+              <div className="mt-4 flex flex-col gap-1">
                 {menuItems.map((item) => (
                   <a
                     key={item.href}
                     href={item.href}
                     target={item.openInNewTab ? "_blank" : "_self"}
                     className={cn(
-                      "block py-2",
-                      pathname === item.href && "font-semibold"
+                      "block py-2 text-lg font-medium",
+                      pathname === item.href ? "font-semibold" : "text-muted-foreground"
                     )}
                   >
                     {item.name}
                   </a>
                 ))}
-              </SheetDescription>
+              </div>
             </SheetHeader>
           </SheetContent>
         </Sheet>
