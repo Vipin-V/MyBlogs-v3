@@ -1,5 +1,6 @@
 "use client";
 
+import { shimmerBlurDataURL } from "@/lib/imageUtils";
 import { AspectRatio } from "@radix-ui/react-aspect-ratio";
 import type { GetRelatedPostsResult } from "@wisp-cms/client";
 import Image from "next/image";
@@ -27,7 +28,9 @@ export const RelatedPosts: FunctionComponent<{
                   src={post.image || "/images/placeholder.png"}
                   alt={post.title}
                   fill
-                  className="h -full min-h-full min-w-full object-cover object-center"
+                  className="h-full min-h-full min-w-full object-cover object-center transition-all duration-500"
+                  placeholder="blur"
+                  blurDataURL={shimmerBlurDataURL}
                 />
               </AspectRatio>
             </Link>

@@ -1,5 +1,6 @@
 "use client";
 import { cn } from "@/lib/utils";
+import { shimmerBlurDataURL } from "@/lib/imageUtils";
 import { GetPostsResult } from "@/lib/wisp";
 import { formatDate } from "date-fns";
 import Image from "next/image";
@@ -15,9 +16,11 @@ export const BlogPostPreview: FunctionComponent<{
         <div className="aspect-[16/9] relative">
           <Image
             alt={post.title}
-            className="object-cover"
+            className="object-cover transition-all duration-500"
             src={post.image || "/images/placeholder.webp"}
             fill
+            placeholder="blur"
+            blurDataURL={shimmerBlurDataURL}
           />
         </div>
       </Link>

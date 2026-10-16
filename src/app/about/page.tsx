@@ -28,13 +28,13 @@ Vipin`;
 export async function generateMetadata() {
   return {
     title: "About Me",
-    description: "Learn more about Vipin and his travel adventures",
+    description: "Learn more about Vipin and his experiences",
     openGraph: {
       title: "About Me",
-      description: "Learn more about Samantha and her travel adventures",
+      description: "Learn more about Vipin and his experiences",
       images: [
         signOgImageUrl({
-          title: "Samantha",
+          title: "Vipin",
           label: "About Me",
           brand: config.blog.name,
         }),
