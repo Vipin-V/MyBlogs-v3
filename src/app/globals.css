@@ -78,3 +78,132 @@
       @apply w-full;
     }
   }
+
+/* ── Scroll-to-top button ─────────────────────────────────────────────────── */
+/* Static CSS (not injected by JS) → parsed once, browser-cached, zero        */
+/* render cost. Transitions only touch opacity + transform (compositor-only    */
+/* properties) so no layout or paint work is triggered during animation.       */
+
+.scroll-to-top-btn {
+  position: fixed;
+  bottom: clamp(1.25rem, 4vw, 2rem);
+  right: clamp(1.25rem, 4vw, 2rem);
+  z-index: 9999;
+  width: clamp(2.75rem, 6vw, 3.25rem);
+  height: clamp(2.75rem, 6vw, 3.25rem);
+  border-radius: 50%;
+  border: 0.5px solid rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  box-shadow:
+    0 4px 24px rgba(0, 0, 0, 0.08),
+    0 1px 4px rgba(0, 0, 0, 0.06),
+    inset 0 0.5px 0 rgba(255, 255, 255, 0.9);
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+
+  /* Promote to its own GPU compositing layer so show/hide never */
+  /* triggers a main-thread paint on the rest of the page.       */
+  will-change: transform, opacity;
+
+  /* Isolate layout + paint to this element only. */
+  contain: layout style paint;
+
+  /* Animate only compositor-friendly properties (no layout thrash). */
+  transition:
+    opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+    background 0.2s ease;
+}
+
+.scroll-to-top-btn.visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+.scroll-to-top-btn.hidden {
+  opacity: 0;
+  transform: translateY(16px) scale(0.88);
+  pointer-events: none;
+}
+
+.scroll-to-top-btn:hover {
+  background: rgba(255, 255, 255, 0.88);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.12),
+    0 2px 8px rgba(0, 0, 0, 0.08),
+    inset 0 0.5px 0 rgba(255, 255, 255, 0.95);
+  transform: translateY(-2px) scale(1.04);
+}
+
+.scroll-to-top-btn:active {
+  transform: translateY(0) scale(0.96);
+  box-shadow:
+    0 2px 12px rgba(0, 0, 0, 0.08),
+    0 1px 3px rgba(0, 0, 0, 0.06),
+    inset 0 0.5px 0 rgba(255, 255, 255, 0.8);
+}
+
+/* Dark mode */
+.dark .scroll-to-top-btn {
+  background: rgba(30, 30, 34, 0.78);
+  border: 0.5px solid rgba(255, 255, 255, 0.12);
+  box-shadow:
+    0 4px 24px rgba(0, 0, 0, 0.4),
+    0 1px 4px rgba(0, 0, 0, 0.3),
+    inset 0 0.5px 0 rgba(255, 255, 255, 0.06);
+}
+
+.dark .scroll-to-top-btn:hover {
+  background: rgba(44, 44, 50, 0.88);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.5),
+    0 2px 8px rgba(0, 0, 0, 0.35),
+    inset 0 0.5px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Chevron icon */
+.scroll-to-top-icon {
+  width: clamp(1rem, 3vw, 1.25rem);
+  height: clamp(1rem, 3vw, 1.25rem);
+  stroke: rgba(0, 0, 0, 0.65);
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+  transition: stroke 0.2s ease, transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.scroll-to-top-btn:hover .scroll-to-top-icon {
+  stroke: rgba(0, 0, 0, 0.85);
+  transform: translateY(-1px);
+}
+
+.dark .scroll-to-top-icon {
+  stroke: rgba(255, 255, 255, 0.75);
+}
+
+.dark .scroll-to-top-btn:hover .scroll-to-top-icon {
+  stroke: rgba(255, 255, 255, 0.95);
+}
+
+/* Respect reduced motion – skip transforms, keep fade */
+@media (prefers-reduced-motion: reduce) {
+  .scroll-to-top-btn {
+    transition: opacity 0.2s ease;
+    will-change: opacity;
+  }
+
+  .scroll-to-top-btn:hover,
+  .scroll-to-top-btn.visible,
+  .scroll-to-top-btn.hidden {
+    transform: none;
+  }
+}
