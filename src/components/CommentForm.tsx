@@ -115,11 +115,18 @@ export function CommentForm({ slug, config, onSuccess }: CommentFormProps) {
       <Alert className="bg-muted border-none">
         <AlertDescription className="space-y-2 text-center">
           <Shield className="text-muted-foreground mx-auto h-10 w-10" />
-          <div className="font-medium">Pending email verification</div>
+          <div className="font-medium">Check your email to verify your comment</div>
           <div className="text-muted-foreground m-auto max-w-lg text-balance text-sm">
-            Thanks for your comment! Please check your email to verify your
-            email and post your comment. If you don&apos;t see it in your inbox,
-            please check your spam folder.
+            Thanks for your comment! A verification link has been sent to your
+            email. Can&apos;t find it?
+          </div>
+          <ul className="text-muted-foreground m-auto max-w-lg list-none space-y-1 text-sm">
+            <li>📁 Check your <strong>Spam / Junk</strong> folder</li>
+            <li>📂 For Gmail users, check the <strong>Promotions</strong> tab</li>
+            <li>⏱️ It may take a few minutes to arrive</li>
+          </ul>
+          <div className="text-muted-foreground m-auto max-w-lg text-balance text-xs pt-1">
+            To stop this from happening, mark the email as <strong>&quot;Not Spam&quot;</strong> once you find it — this trains your email provider to trust future emails.
           </div>
         </AlertDescription>
       </Alert>
