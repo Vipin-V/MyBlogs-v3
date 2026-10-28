@@ -6,7 +6,7 @@ import Markdown from "react-markdown";
 
 const content = `# About Me
 
-![Vipin](https://i.ibb.co/My21h21t/vip-Cloud.webp)
+![Vipin](https://raw.githubusercontent.com/Vipin-V/imgHub/refs/heads/main/images/blogAboutVipin.avif)
 
 hey, i'm Vipin.
 
