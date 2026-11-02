@@ -17,10 +17,13 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { AxiosError } from "axios";
-import { Shield } from "lucide-react";
+import { Shield, Clock } from "lucide-react";
 import { useForm } from "react-hook-form";
+import { useEffect, useRef, useState } from "react";
 import { z } from "zod";
 import { wisp } from "@/lib/wisp";
+
+const RATE_LIMIT_FALLBACK_SECONDS = 60;
 
 const formSchema = z.object({
   author: z.string().min(1, "Name is required"),
@@ -62,12 +65,47 @@ interface CreateCommentRequest {
 
 export function CommentForm({ slug, config, onSuccess }: CommentFormProps) {
   const { toast } = useToast();
+  const [cooldown, setCooldown] = useState(0);
+  const cooldownRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  // Start a visual countdown after a 429 response
+  const startCooldown = (seconds: number) => {
+    setCooldown(seconds);
+    if (cooldownRef.current) clearInterval(cooldownRef.current);
+    cooldownRef.current = setInterval(() => {
+      setCooldown((prev) => {
+        if (prev <= 1) {
+          clearInterval(cooldownRef.current!);
+          cooldownRef.current = null;
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (cooldownRef.current) clearInterval(cooldownRef.current);
+    };
+  }, []);
+
   const { mutateAsync: createComment, data } = useMutation({
     mutationFn: async (input: CreateCommentRequest) => {
       try {
         return await wisp.createComment(input);
       } catch (e) {
         if (e instanceof AxiosError) {
+          // Handle 429 rate limit specifically
+          if (e.response?.status === 429) {
+            const retryAfter =
+              parseInt(e.response.headers?.["retry-after"] ?? "") ||
+              RATE_LIMIT_FALLBACK_SECONDS;
+            startCooldown(retryAfter);
+            throw new Error(
+              `You're commenting too fast. Please wait ${retryAfter} second${retryAfter !== 1 ? "s" : ""} before trying again.`
+            );
+          }
           const errorData = e.response?.data as ErrorResponse | undefined;
           if (errorData?.error?.message) {
             throw new Error(errorData.error.message);
@@ -90,6 +128,7 @@ export function CommentForm({ slug, config, onSuccess }: CommentFormProps) {
   });
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    if (cooldown > 0) return;
     try {
       await createComment({
         ...values,
@@ -236,8 +275,18 @@ export function CommentForm({ slug, config, onSuccess }: CommentFormProps) {
         )}
 
         <div className="flex items-center justify-between pt-2">
-          <Button type="submit" disabled={form.formState.isSubmitting}>
-            Post Comment
+          <Button
+            type="submit"
+            disabled={form.formState.isSubmitting || cooldown > 0}
+          >
+            {cooldown > 0 ? (
+              <span className="flex items-center gap-2">
+                <Clock className="h-4 w-4 animate-pulse" />
+                Try again in {cooldown}s
+              </span>
+            ) : (
+              "Post Comment"
+            )}
           </Button>
         </div>
       </form>
