@@ -1,7 +1,9 @@
 "use client";
 import { GetPostResult } from "@/lib/wisp";
+import { getReadTime } from "@/lib/readTime";
 import Link from "next/link";
 import sanitize, { defaults } from "sanitize-html";
+import { Clock } from "lucide-react";
 
 export const PostContent = ({ content }: { content: string }) => {
   const sanitizedContent = sanitize(content, {
@@ -55,6 +57,7 @@ export const PostContent = ({ content }: { content: string }) => {
 export const BlogPostContent = ({ post }: { post: GetPostResult["post"] }) => {
   if (!post) return null;
   const { title, publishedAt, createdAt, content, tags } = post;
+  const readTime = getReadTime(content);
   return (
     <div>
       <div className="prose lg:prose-xl dark:prose-invert mx-auto lg:prose-h1:text-4xl mb-10 lg:mt-20 break-words">
@@ -72,10 +75,17 @@ export const BlogPostContent = ({ post }: { post: GetPostResult["post"] }) => {
             </Link>
           ))}
         </div>
-        <div className="text-sm opacity-40 mt-4">
-          {Intl.DateTimeFormat("en-US").format(
-            new Date(publishedAt || createdAt)
-          )}
+        <div className="text-sm opacity-40 mt-4 flex items-center gap-2 flex-wrap">
+          <span>
+            {Intl.DateTimeFormat("en-US").format(
+              new Date(publishedAt || createdAt)
+            )}
+          </span>
+          <span className="opacity-60 select-none">·</span>
+          <span className="flex items-center gap-1 not-italic">
+            <Clock className="w-3.5 h-3.5 shrink-0" />
+            {readTime}
+          </span>
         </div>
       </div>
     </div>

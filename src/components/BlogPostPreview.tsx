@@ -3,13 +3,15 @@ import { cn } from "@/lib/utils";
 import { shimmerBlurDataURL } from "@/lib/imageUtils";
 import { GetPostsResult } from "@/lib/wisp";
 import { formatDate } from "date-fns";
+import { Clock } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { FunctionComponent } from "react";
 
 export const BlogPostPreview: FunctionComponent<{
   post: GetPostsResult["posts"][0];
-}> = ({ post }) => {
+  readTime?: string;
+}> = ({ post, readTime }) => {
   return (
     <div className="break-words">
       <Link href={`/blog/${post.slug}`}>
@@ -28,8 +30,17 @@ export const BlogPostPreview: FunctionComponent<{
         <h2 className="font-sans font-semibold tracking-tighter text-primary text-2xl md:text-3xl">
           <Link href={`/blog/${post.slug}`}>{post.title}</Link>
         </h2>
-        <div className="prose lg:prose-lg italic tracking-tighter text-muted-foreground">
-          {formatDate(post.publishedAt || post.updatedAt, "dd MMMM yyyy")}
+        <div className="prose lg:prose-lg italic tracking-tighter text-muted-foreground flex items-center gap-2 flex-wrap">
+          <span>{formatDate(post.publishedAt || post.updatedAt, "dd MMMM yyyy")}</span>
+          {readTime && (
+            <>
+              <span className="text-muted-foreground/40 select-none">·</span>
+              <span className="flex items-center gap-1 not-italic font-medium text-sm text-muted-foreground">
+                <Clock className="w-3.5 h-3.5 shrink-0" />
+                {readTime}
+              </span>
+            </>
+          )}
         </div>
         <Link href={`/blog/${post.slug}`} className="block cursor-pointer">
           <div className="prose lg:prose-lg leading-relaxed md:text-lg line-clamp-4 text-muted-foreground">
@@ -50,8 +61,9 @@ export const BlogPostPreview: FunctionComponent<{
 
 export const BlogPostsPreview: FunctionComponent<{
   posts: GetPostsResult["posts"];
+  readTimes?: Record<string, string>;
   className?: string;
-}> = ({ posts, className }) => {
+}> = ({ posts, readTimes, className }) => {
   return (
     <div
       className={cn(
@@ -60,7 +72,11 @@ export const BlogPostsPreview: FunctionComponent<{
       )}
     >
       {posts.map((post) => (
-        <BlogPostPreview key={post.id} post={post} />
+        <BlogPostPreview
+          key={post.id}
+          post={post}
+          readTime={readTimes?.[post.slug]}
+        />
       ))}
     </div>
   );
