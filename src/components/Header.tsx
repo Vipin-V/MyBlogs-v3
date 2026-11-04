@@ -7,6 +7,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { SearchModal } from "@/components/SearchModal";
 import { config } from "@/config";
 import { cn } from "@/lib/utils";
 import { Menu } from "lucide-react";
@@ -26,7 +27,7 @@ export const Navigation: FunctionComponent = () => {
   const pathname = usePathname();
 
   return (
-    <nav>
+    <nav className="flex items-center gap-2">
       <div className="hidden md:flex items-center">
         {menuItems.map((item) => (
           <div key={item.href} className="ml-4 md:ml-8">
@@ -43,9 +44,13 @@ export const Navigation: FunctionComponent = () => {
           </div>
         ))}
       </div>
+
+      {/* Search — visible on all screen sizes */}
+      <SearchModal />
+
       <div className="md:hidden">
         <Sheet>
-          <SheetTrigger>
+          <SheetTrigger className="p-1">
             <Menu size="24" />
           </SheetTrigger>
           <SheetContent className="!w-64" aria-describedby={undefined}>
