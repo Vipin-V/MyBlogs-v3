@@ -60,7 +60,7 @@ export function SearchModal() {
       } finally {
         setLoading(false);
       }
-    }, 500);
+    }, 400);
     return () => clearTimeout(timer);
   }, [query]);
 
