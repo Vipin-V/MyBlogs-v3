@@ -118,7 +118,7 @@ export function SearchModal() {
                 onChange={(e) => { setQuery(e.target.value); setActiveIndex(-1); }}
                 onKeyDown={handleKeyDown}
                 placeholder="Search posts…"
-                className="w-full bg-transparent text-sm outline-none placeholder:text-muted-foreground"
+                className="w-full bg-transparent text-[16px] leading-tight outline-none placeholder:text-muted-foreground"
                 autoComplete="off"
               />
               {loading
